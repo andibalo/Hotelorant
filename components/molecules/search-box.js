@@ -22,7 +22,7 @@ export const SearchBox = () => {
           size="lg"
         />
         <Box>
-          <Button h="full">Search</Button>
+          <Button size="lg">Search</Button>
         </Box>
       </Stack>
     </Box>

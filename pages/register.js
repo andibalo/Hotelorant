@@ -33,10 +33,9 @@ const Register = () => {
               </Heading>
               <Text color="brand.200">
                 Already have an account?{" "}
-                <Box as="span" color="brand.300">
+                <Box as="span" color="brand.100">
                   <Link href="/login">Log into your account</Link>
                 </Box>
-                , it takes less then a minute
               </Text>
             </Box>
             <Box>

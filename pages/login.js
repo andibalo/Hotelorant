@@ -30,10 +30,9 @@ const Login = () => {
               </Heading>
               <Text color="brand.200">
                 Don't have an account?{" "}
-                <Box as="span" color="brand.300">
-                  <Link href="/register">Create your account</Link>
+                <Box as="span" color="brand.100">
+                  <Link href="/register">Create an account</Link>
                 </Box>
-                , it takes less then a minute
               </Text>
             </Box>
             <Box>

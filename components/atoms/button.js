@@ -4,11 +4,11 @@ export const Button = ({
   variant = "solid",
   children,
   ml,
-  h,
   onClick,
   fullWidth = false,
   leftIcon,
   rightIcon,
+  size = "md",
   isDisabled = false,
 }) => {
   return (
@@ -22,7 +22,7 @@ export const Button = ({
       color={variant === "outline" ? "brand.100" : "white"}
       ml={ml}
       variant={variant}
-      h={h}
+      size={size}
       flex={fullWidth ? "1" : null}
     >
       {children}
