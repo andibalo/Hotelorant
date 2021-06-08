@@ -19,7 +19,7 @@ const Login = () => {
       <Flex flex="1">
         <Box flex="1">
           <Box h="full" w="full" position="relative" overflow="hidden">
-            <Image src="/login.png" layout="fill" objectFit="cover" />
+            <Image src="/catandi.jpg" layout="fill" objectFit="cover" />
           </Box>
         </Box>
         <Box flex="1">
