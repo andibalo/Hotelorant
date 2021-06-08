@@ -45,7 +45,6 @@ const Register = () => {
                 <Input type="file" />
                 <FormHelperText>*optional</FormHelperText>
               </FormControl>
-
               <Stack direction="row" spacing="5">
                 <FormControl mb="3">
                   <FormLabel>Name</FormLabel>
