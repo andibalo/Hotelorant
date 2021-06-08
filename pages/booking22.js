@@ -16,7 +16,6 @@ import {
   import { Container } from "../components/atoms/container";
   import { Button } from "../components/atoms/button";
   import Image from "next/image";
-import { CheckIcon } from "@chakra-ui/icons";
   
 export default function Invoice (){
     return (
@@ -25,8 +24,8 @@ export default function Invoice (){
         <Container>
         <Box>
         <Center>
-            <Box borderRadius="50%" backgroundColor="#1ABC9C;" width="16" height="16" display="flex" justifyContent="center" alignItems="center">
-                <CheckIcon color="#FFFFFF;"></CheckIcon>
+            <Box borderRadius="50%" backgroundColor="#E5E5E5;" width="16" height="16" display="flex" justifyContent="center" alignItems="center">
+                <Heading color="#898989;">1</Heading>
             </Box>
             <Box backgroundColor="#E5E5E5;" width="7" height="1">
             </Box>
@@ -95,7 +94,11 @@ export default function Invoice (){
             </Box>
         </Flex>
         <Flex justifyContent="center">
-            <Button colorScheme="gray.200">Cancel</Button>  
+            <Stack direction="column" spacing={3}>
+                <Button>Continue to Book</Button>
+                <Button>Cancel</Button>
+            </Stack>
+            
         </Flex>
         </Container>
     </Flex>
