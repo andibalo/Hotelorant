@@ -1,29 +1,51 @@
+import { useState, useEffect } from "react";
 import {
   Box,
   Flex,
   Text,
   IconButton,
+  SkeletonCircle,
+  SkeletonText,
   Button,
   Stack,
   Collapse,
   Icon,
-  Link,
+  Link as ChakraLink,
   Popover,
   PopoverTrigger,
   PopoverContent,
   useColorModeValue,
   useBreakpointValue,
   useDisclosure,
+  Avatar,
+  Menu,
+  MenuList,
+  MenuItem,
+  MenuButton,
 } from "@chakra-ui/react";
-import {
-  HamburgerIcon,
-  CloseIcon,
-  ChevronDownIcon,
-  ChevronRightIcon,
-} from "@chakra-ui/icons";
+import { HamburgerIcon, CloseIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { Brand } from "./atoms/brand";
+import Link from "next/link";
+import { signOut, getSession } from "next-auth/client";
+import { AiOutlineLogout } from "@react-icons/all-files/ai/AiOutlineLogout";
+import { AiOutlineUser } from "@react-icons/all-files/ai/AiOutlineUser";
+import { AiOutlineBook } from "@react-icons/all-files/ai/AiOutlineBook";
 
 export function Navbar() {
+  const [loading, setLoading] = useState(true);
+  const [session, setSession] = useState(null);
+
+  useEffect(() => {
+    getSession().then((data) => {
+      setSession(data);
+      setLoading(false);
+    });
+  }, []);
+
+  const handleLogout = () => {
+    signOut();
+  };
+
   const { isOpen, onToggle } = useDisclosure();
 
   return (
@@ -56,39 +78,79 @@ export function Navbar() {
         <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
           <Brand />
           <Flex display={{ base: "none", md: "flex" }} ml={"auto"} mr={10}>
-            <DesktopNav />
+            <DesktopNav session={session} loading={loading} />
           </Flex>
         </Flex>
-
-        <Stack
-          flex={{ base: 1, md: 0 }}
-          justify={"flex-end"}
-          direction={"row"}
-          spacing={6}
-        >
-          <Button
-            as={"a"}
-            fontSize={"sm"}
-            fontWeight={400}
-            variant={"link"}
-            href={"/login"}
+        {loading && (
+          <Flex alignItems="center">
+            <SkeletonCircle size="10" />
+            <SkeletonText noOfLines={2} spacing="3" />
+          </Flex>
+        )}
+        {!loading && session && (
+          <Menu>
+            <MenuButton cursor={"pointer"}>
+              <Stack direction="row" spacing="5" alignItems="center">
+                <Avatar size="md" src={session.picture} />
+                <Text color="brand.200">{session.name}</Text>
+              </Stack>
+            </MenuButton>
+            <MenuList>
+              <Link href="/user">
+                <MenuItem icon={<AiOutlineBook />}>Bookings List</MenuItem>
+              </Link>
+              <Link href="/user/edit-profile">
+                <MenuItem icon={<AiOutlineUser />}>Edit Profile</MenuItem>
+              </Link>
+              <MenuItem
+                icon={<AiOutlineLogout />}
+                color="red.500"
+                onClick={handleLogout}
+              >
+                Logout
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        )}
+        {!loading && !session && (
+          <Stack
+            flex={{ base: 1, md: 0 }}
+            justify={"flex-end"}
+            direction={"row"}
+            spacing={6}
           >
-            Sign In
-          </Button>
-          <Button
-            display={{ base: "none", md: "inline-flex" }}
-            fontSize={"sm"}
-            fontWeight={600}
-            color={"white"}
-            bg={"pink.400"}
-            href={"/register"}
-            _hover={{
-              bg: "pink.300",
-            }}
-          >
-            Sign Up
-          </Button>
-        </Stack>
+            <Link href={"/login"}>
+              <a style={{ display: "flex" }}>
+                <Button
+                  fontSize={"sm"}
+                  fontWeight={400}
+                  variant={"link"}
+                  cursor="pointer"
+                >
+                  Sign In
+                </Button>
+              </a>
+            </Link>
+            <Link href={"/register"}>
+              <a>
+                <Button
+                  display={{ base: "none", md: "inline-flex" }}
+                  as="a"
+                  fontSize={"sm"}
+                  fontWeight={600}
+                  color={"white"}
+                  bg={"pink.400"}
+                  _hover={{
+                    bg: "pink.300",
+                  }}
+                  cursor="pointer"
+                >
+                  Sign Up
+                </Button>
+              </a>
+            </Link>
+          </Stack>
+        )}
       </Flex>
 
       <Collapse in={isOpen} animateOpacity>
@@ -98,14 +160,14 @@ export function Navbar() {
   );
 }
 
-const DesktopNav = () => {
+const DesktopNav = ({ session, loading }) => {
   return (
     <Stack direction={"row"} spacing={4}>
       {NAV_ITEMS.map((navItem) => (
         <Box key={navItem.label}>
           <Popover trigger={"hover"} placement={"bottom-start"}>
             <PopoverTrigger>
-              <Link
+              <ChakraLink
                 p={2}
                 href={navItem.href ?? "#"}
                 fontSize={"sm"}
@@ -117,7 +179,7 @@ const DesktopNav = () => {
                 }}
               >
                 {navItem.label}
-              </Link>
+              </ChakraLink>
             </PopoverTrigger>
           </Popover>
         </Box>
@@ -147,7 +209,7 @@ const MobileNavItem = ({ label, children, href }) => {
     <Stack spacing={4} onClick={children && onToggle}>
       <Flex
         py={2}
-        as={Link}
+        as={ChakraLink}
         href={href ?? "#"}
         justify={"space-between"}
         align={"center"}
@@ -200,10 +262,6 @@ const NAV_ITEMS = [
   },
   {
     label: "About Us",
-    href: "/about",
-  },
-  {
-    label: "Bookings List",
-    href: "/bookings",
+    href: "/aboutus",
   },
 ];
