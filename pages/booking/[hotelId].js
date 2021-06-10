@@ -1,8 +1,7 @@
+import { useState, useEffect } from "react";
 import { Navbar } from "../../components/navbar";
 import {
-  Avatar,
   Center,
-  HStack,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
@@ -10,11 +9,8 @@ import {
   NumberDecrementStepper,
   Divider,
   SimpleGrid,
-  Const,
   Text,
-  StarIcon,
   Image,
-  Badge,
   Box,
   Flex,
   Heading,
@@ -24,12 +20,73 @@ import {
   Input,
   Button as ChakraButton,
 } from "@chakra-ui/react";
-import { ArrowBackIcon } from "@chakra-ui/icons";
 import { Container } from "../../components/atoms/container";
 import { Button } from "../../components/atoms/button";
 import db from "../../utils/db/index";
+import { formatRupiah } from "../../utils/functions";
+import moment from "moment";
+import axios from "axios";
+import { useRouter } from "next/router";
 
-export default function Booking() {
+export default function Booking(props) {
+  console.log(props);
+
+  const router = useRouter();
+  const { name, price, location, images, id } = props.hotel;
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phoneNumber: "",
+    rooms: 1,
+    checkInDate: moment(new Date()).format("YYYY-MM-DD"),
+    checkOutDate: moment(new Date()).add(1, "days").format("YYYY-MM-DD"),
+    nights: 1,
+  });
+
+  const { email, phoneNumber, rooms, checkInDate, checkOutDate, nights } =
+    formData;
+
+  useEffect(() => {
+    if (checkOutDate !== "") {
+      const endDate = moment(new Date(checkOutDate));
+      const daysDiff = endDate.diff(moment(new Date(checkInDate)), "days");
+      console.log(endDate.diff(moment(new Date(checkInDate)), "days"));
+      setFormData({
+        ...formData,
+        nights: daysDiff,
+      });
+    }
+  }, [checkInDate, checkOutDate]);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleDateChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const res = await axios.post("/api/booking", {
+        ...formData,
+        totalPrice: price * rooms * nights,
+        hotelId: id,
+      });
+      // console.log(res);
+      router.replace(`/invoice/${res.data.booking.id}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div>
       <Navbar />
@@ -80,44 +137,74 @@ export default function Booking() {
         </Text>
         <Flex direction="column">
           <Stack direction="row" spacing="5" mt="30">
-            <SimpleGrid>
-              <Box h="250px" w="350px" position="left" overflow="hidden">
-                <Image src="/register.png" layout="fill" objectFit="cover" />
+            <Box flex="1">
+              <Box
+                h="250px"
+                w="full"
+                position="left"
+                overflow="hidden"
+                borderRadius="xl"
+                mb="3"
+              >
+                <Image src={images[0]} w="full" h="full" objectFit="cover" />
               </Box>
               <SimpleGrid columns={2}>
                 <Box>
-                  <Text color="brand.200" fontSize="2xl">
-                    Ritz Carlton
+                  <Text
+                    color="brand.200"
+                    fontSize="2xl"
+                    textTransform="capitalize"
+                  >
+                    {name}
                   </Text>
-                  <Text color="gray.300" fontSize="2l">
-                    Jakarta, Indonesia
+                  <Text
+                    color="gray.500"
+                    fontSize="lg"
+                    textTransform="capitalize"
+                  >
+                    {location}
                   </Text>
                 </Box>
                 <Box>
                   <Text color="brand.200" fontSize="xl">
-                    Rp 2.000.000 / 1 Malam
+                    {`${formatRupiah(price)} / Night`}
                   </Text>
                 </Box>
               </SimpleGrid>
-            </SimpleGrid>
+            </Box>
 
             <Divider orientation="vertical" m="7" height="355px" />
 
-            <Box flex="1" mt="10">
+            <Box flex="1" mt="10" flex="1">
               <FormControl mb="3" align="center">
                 <FormLabel>Full Name</FormLabel>
-                <Input type="text" />
+                <Input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                />
               </FormControl>
               <FormControl mb="3">
                 <FormLabel>Email Address</FormLabel>
-                <Input type="password" />
+                <Input
+                  type="email"
+                  name="email"
+                  value={email}
+                  onChange={handleChange}
+                />
               </FormControl>
               <FormControl mb="3">
                 <FormLabel>Phone Number</FormLabel>
-                <Input type="text" />
+                <Input
+                  type="text"
+                  name="phoneNumber"
+                  value={phoneNumber}
+                  onChange={handleChange}
+                />
               </FormControl>
               <Box mt="120px" align="center">
-                <Button>Continue to Book</Button>
+                <Button onClick={handleSubmit}>Continue to Book</Button>
               </Box>
               <Box mt="20px" align="center">
                 <Button isDisabled>Cancel</Button>
@@ -126,10 +213,19 @@ export default function Booking() {
 
             <Divider orientation="vertical" m="7" height="355px" />
 
-            <Box flex="1" mt="10">
-              <FormControl mb="3" align="center">
-                <FormLabel>How long you will stay?</FormLabel>
-                <NumberInput step={1} defaultValue={1} min={1} max={31}>
+            <Box flex="1" mt="10" flex="1">
+              <FormControl mb="3">
+                <FormLabel>How many rooms are you booking?</FormLabel>
+                <NumberInput
+                  step={1}
+                  defaultValue={1}
+                  min={1}
+                  max={31}
+                  value={rooms}
+                  onChange={(value) =>
+                    setFormData({ ...formData, rooms: value })
+                  }
+                >
                   <NumberInputField />
                   <NumberInputStepper>
                     <NumberIncrementStepper />
@@ -139,26 +235,33 @@ export default function Booking() {
               </FormControl>
               <FormControl mb="3">
                 <FormLabel>Check In Date</FormLabel>
-                <Input type="date" />
+                <Input
+                  type="date"
+                  name="checkInDate"
+                  value={checkInDate}
+                  onChange={handleDateChange}
+                />
               </FormControl>
               <FormControl mb="3">
                 <FormLabel>Check Out Date</FormLabel>
-                <Input type="date" />
+                <Input
+                  min={moment(new Date(checkInDate), "YYYY-MM-DD")
+                    .add(1, "days")
+                    .format("YYYY-MM-DD")}
+                  type="date"
+                  name="checkOutDate"
+                  value={checkOutDate}
+                  onChange={handleDateChange}
+                />
               </FormControl>
               <FormControl mb="3">
-                <FormLabel>Room</FormLabel>
-                <NumberInput step={1} defaultValue={1} min={1} max={31}>
-                  <NumberInputField />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                  </NumberInputStepper>
-                </NumberInput>
+                <FormLabel>Nights</FormLabel>
+                <Text>{formData.nights}</Text>
               </FormControl>
               <FormControl mb="3">
                 <FormLabel>Total price</FormLabel>
                 <Text fontSize="5xl" color="#1ABC9C">
-                  Rp 2.000.000
+                  {formatRupiah(price * rooms * nights)}
                 </Text>
               </FormControl>
             </Box>

@@ -23,12 +23,7 @@ import {
   MenuItem,
   MenuButton,
 } from "@chakra-ui/react";
-import {
-  HamburgerIcon,
-  CloseIcon,
-  ChevronDownIcon,
-  ChevronRightIcon,
-} from "@chakra-ui/icons";
+import { HamburgerIcon, CloseIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { Brand } from "./atoms/brand";
 import Link from "next/link";
 import { signOut, getSession } from "next-auth/client";
@@ -46,10 +41,6 @@ export function Navbar() {
       setLoading(false);
     });
   }, []);
-
-  useEffect(() => {
-    console.log(session);
-  }, [session]);
 
   const handleLogout = () => {
     signOut();
