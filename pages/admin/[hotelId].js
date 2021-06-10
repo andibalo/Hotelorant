@@ -29,22 +29,23 @@ import axios from "axios";
 import { AiOutlineFileImage } from "@react-icons/all-files/ai/AiOutlineFileImage";
 import { storage } from "../../utils/firebase/index";
 import { useRouter } from "next/router";
+import db from "../../utils/db";
 
 const MAX_IMG_UPLOAD = 3;
 
-export default function AddHotel() {
+export default function EditHotel(props) {
   const router = useRouter();
   const [formData, setFormData] = useState({
     images: [],
-    name: "",
-    description: "",
-    rooms: 1,
-    price: 0,
-    location: "jakarta",
-    hasTv: false,
-    hasAc: false,
-    hasWifi: false,
-    hasFridge: false,
+    name: props.hotel.name,
+    description: props.hotel.description,
+    rooms: props.hotel.rooms,
+    price: props.hotel.price,
+    location: props.hotel.location,
+    hasTv: props.hotel.hasTv,
+    hasAc: props.hotel.hasAc,
+    hasWifi: props.hotel.hasWifi,
+    hasFridge: props.hotel.hasFridge,
   });
 
   const [facilitiesCheckbox, setFacilitiesCheckbox] = useState([]);
@@ -63,6 +64,28 @@ export default function AddHotel() {
     hasWifi,
     hasFridge,
   } = formData;
+
+  const setCheckboxDefaultValue = () => {
+    const defaultValue = [];
+
+    if (hasFridge) {
+      defaultValue.push("refrigerator");
+    }
+
+    if (hasTv) {
+      defaultValue.push("tv");
+    }
+
+    if (hasAc) {
+      defaultValue.push("ac");
+    }
+
+    if (hasWifi) {
+      defaultValue.push("wifi");
+    }
+
+    return defaultValue;
+  };
 
   const handleSubmit = async () => {
     try {
@@ -206,7 +229,7 @@ export default function AddHotel() {
           </ChakraButton>
         </Link>
         <Heading color="brand.200" fontSize="5xl" mb="5">
-          Add Hotel
+          Edit Hotel
         </Heading>
         <Box>
           <Stack direction="row" spacing="5">
@@ -219,7 +242,6 @@ export default function AddHotel() {
               type="file"
               onChange={(e) => handleChooseImage(e)}
               isDisabled={previewImages.length === MAX_IMG_UPLOAD}
-              accept="image/*"
             />
             <FormHelperText>Maximum of 3 images</FormHelperText>
           </FormControl>
@@ -273,7 +295,10 @@ export default function AddHotel() {
           </FormControl>
           <FormControl mb="5">
             <FormLabel>Facilities</FormLabel>
-            <CheckboxGroup onChange={(value) => handleCheckboxChange(value)}>
+            <CheckboxGroup
+              onChange={(value) => handleCheckboxChange(value)}
+              defaultValue={setCheckboxDefaultValue()}
+            >
               <VStack alignItems="start">
                 <Checkbox value="refrigerator">Refrigerator</Checkbox>
                 <Checkbox value="ac">AC</Checkbox>
@@ -282,9 +307,51 @@ export default function AddHotel() {
               </VStack>
             </CheckboxGroup>
           </FormControl>
-          <Button onClick={handleSubmit}>Create</Button>
+          <Button onClick={handleSubmit}>Edit</Button>
         </Box>
       </Container>
     </div>
   );
+}
+
+export async function getServerSideProps(context) {
+  // const session = await getSession({ req: context.req });
+
+  // if (session && !session.user.isAdmin) {
+  //   return {
+  //     redirect: {
+  //       destination: "/",
+  //       permanent: true,
+  //     },
+  //   };
+  // }
+
+  const hotelRef = db.collection("hotels").doc(context.query.hotelId);
+  const doc = await hotelRef.get();
+
+  if (!doc.exists) {
+    return {
+      notFound: true,
+    };
+  }
+
+  const hotel = {
+    id: doc.id,
+    name: doc.data().name,
+    description: doc.data().description,
+    price: doc.data().price,
+    rooms: doc.data().rooms,
+    location: doc.data().location,
+    images: doc.data().images,
+    hasTv: doc.data().hasTv,
+    hasWifi: doc.data().hasWifi,
+    hasFridge: doc.data().hasFridge,
+    hasAc: doc.data().hasAc,
+  };
+
+  return {
+    props: {
+      hotel,
+    },
+  };
 }

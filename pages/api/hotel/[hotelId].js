@@ -25,7 +25,7 @@ const validateBody = initMiddleware(
 );
 
 export default async function handler(req, res) {
-  if (req.method === "POST") {
+  if (req.method === "PUT") {
     //console.log(req.body);\
 
     const FieldValue = admin.firestore.FieldValue;
@@ -73,21 +73,14 @@ export default async function handler(req, res) {
     return res.status(200).json({ message: "ok" });
   }
 
-  if (req.method === "GET") {
-    const hotels = [];
-    const hotelsRef = db.collection("hotels");
-    const snapshot = await hotelsRef.get();
-    snapshot.forEach((doc) => {
-      hotels.push({
-        ...doc.data(),
-        id: doc.id,
-        timestamp: doc.data().timestamp._seconds,
-      });
+  if (req.method === "DELETE") {
+    try {
+      await db.collection("hotels").doc(req.query.hotelId).delete();
+    } catch (error) {
+      throw new Error("COuld not delete data");
+    }
 
-      console.log(doc.id, "=>", doc.data());
-    });
-
-    return res.status(200).json({ message: "ok", hotels });
+    return res.status(200).json({ message: "ok" });
   }
 
   return res.status(400).json({ message: "invalid http method" });
