@@ -26,9 +26,11 @@ export default function BookingList(props) {
           Booked Hotel
         </Heading>
         <Flex direction="column">
-          <Box pt="6" color="#B0B0B0">
+          <Box>
             {bookings && bookings.length > 0 ? (
-              bookings.map((booking) => <BookedRow booking={booking} />)
+              bookings.map((booking) => (
+                <BookedRow key={booking.id} booking={booking} />
+              ))
             ) : (
               <Center>
                 <Heading fontSize="xl">No Bookings Yet</Heading>

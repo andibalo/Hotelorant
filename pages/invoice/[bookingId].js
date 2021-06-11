@@ -1,18 +1,16 @@
 import {
   Flex,
   Center,
-  WrapItem,
   Divider,
   SimpleGrid,
   Box,
   Heading,
   Text,
+  Image,
 } from "@chakra-ui/react";
 import { Navbar } from "../../components/navbar";
 import { Button } from "../../components/atoms/button";
 import { Container } from "../../components/atoms/container";
-import Image from "next/image";
-import { ChatIcon, PhoneIcon, StarIcon, SunIcon } from "@chakra-ui/icons";
 import db from "../../utils/db/index";
 import moment from "moment";
 import { formatRupiah } from "../../utils/functions";
@@ -20,7 +18,7 @@ import Link from "next/link";
 import { getSession } from "next-auth/client";
 
 export default function Invoice(props) {
-  // console.log(props);
+  console.log(props);
   const { booking, hotel } = props;
   return (
     <Flex minH="100vh" flexDirection="column">
@@ -92,21 +90,41 @@ export default function Invoice(props) {
           </Box>
           <Divider orientation="vertical" m="7" height="575px" />
           <SimpleGrid>
-            <Box h="296px" w="475px" position="relative" overflow="hidden">
-              <Image src="/login.png" layout="fill" objectFit="cover" />
+            <Box
+              h="296px"
+              w="475px"
+              position="relative"
+              borderRadius="xl"
+              overflow="hidden"
+            >
+              <Image
+                src={hotel.images[0]}
+                h="full"
+                w="full"
+                objectFit="cover"
+              />
             </Box>
             <Box mt="10">
-              <Text color="#152C5B;" fontSize="2xl" mb="3">
+              <Text color="#152C5B;" fontSize="2xl" mb="3" fontWeight="bold">
                 Dibayar oleh
               </Text>
               <Text color="#152C5B;" fontSize="2xl">
-                Nama: {booking.name}
+                <Box as="span" color="gray.500">
+                  Nama:
+                </Box>{" "}
+                {booking.name}
               </Text>
               <Text color="#152C5B;" fontSize="2xl">
-                Email: {booking.email}
+                <Box as="span" color="gray.500">
+                  Email:
+                </Box>{" "}
+                {booking.email}
               </Text>
               <Text color="#152C5B;" fontSize="2xl">
-                No.Telp: {booking.phoneNumber}
+                <Box as="span" color="gray.500">
+                  Phone:
+                </Box>{" "}
+                {booking.phoneNumber}
               </Text>
             </Box>
           </SimpleGrid>

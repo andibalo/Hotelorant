@@ -23,7 +23,7 @@ export const BookedRow = ({ booking }) => {
   } = booking;
 
   return (
-    <Stack direction="row" spacing="5" mt="5">
+    <Stack direction="row" spacing="5" mt="10">
       <Box h="250px" w="300px" position="left" overflow="hidden">
         <Image
           borderRadius="10%"
@@ -38,8 +38,7 @@ export const BookedRow = ({ booking }) => {
           {hotel.name}
         </Text>
         <Text color="gray.500" fontSize="2l">
-          Jl. DR. Ide Anak Agung Gde Agung Jl. Mega Kuningan Barat No.1
-          Kuningan, Jakarta.
+          {hotel.address}
         </Text>
 
         <Box mt="2" mb="2">

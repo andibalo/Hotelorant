@@ -16,20 +16,20 @@ import Link from "next/link";
 export const HotelRow = ({ hotel, handleDeleteHotelRow }) => {
   const { name, description, location, images, id } = hotel;
   return (
-    <Stack mt="16">
-      <SimpleGrid columns={3} spacing="5">
+    <Box mt="10" h="250px">
+      <SimpleGrid columns={3} spacing="5" h="full">
         <Center borderRadius="xl" overflow="hidden">
           <Image src={images[0]} w="full" h="full" objectFit="cover" />
         </Center>
         <Box>
           <Text>
-            <Text color="brand.200" fontSize="3xl">
+            <Text color="brand.200" fontSize="3xl" textTransform="capitalize">
               {name}
             </Text>
-            <Text color="brand.200" fontSize="1xl">
+            <Text color="brand.200" fontSize="1xl" textTransform="capitalize">
               {location}
             </Text>
-            <Text color="#B0B0B0;" fontSize="1xl">
+            <Text color="#B0B0B0;" fontSize="1xl" mb="5">
               {description}
             </Text>
             <Box>
@@ -59,6 +59,6 @@ export const HotelRow = ({ hotel, handleDeleteHotelRow }) => {
           </SimpleGrid>
         </Center>
       </SimpleGrid>
-    </Stack>
+    </Box>
   );
 };

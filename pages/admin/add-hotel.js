@@ -41,6 +41,7 @@ export default function AddHotel() {
     rooms: 1,
     price: 0,
     location: "jakarta",
+    address: "",
     hasTv: false,
     hasAc: false,
     hasWifi: false,
@@ -58,6 +59,7 @@ export default function AddHotel() {
     rooms,
     price,
     location,
+    address,
     hasTv,
     hasAc,
     hasWifi,
@@ -270,6 +272,15 @@ export default function AddHotel() {
               <option value="bogor">Bogor</option>
               <option value="depok">Depok</option>
             </Select>
+          </FormControl>
+          <FormControl mb="3">
+            <FormLabel>Address</FormLabel>
+            <Input
+              type="text"
+              name="address"
+              value={address}
+              onChange={handleChange}
+            />
           </FormControl>
           <FormControl mb="5">
             <FormLabel>Facilities</FormLabel>

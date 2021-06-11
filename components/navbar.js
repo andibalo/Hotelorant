@@ -31,6 +31,7 @@ import { AiOutlineLogout } from "@react-icons/all-files/ai/AiOutlineLogout";
 import { AiOutlineUser } from "@react-icons/all-files/ai/AiOutlineUser";
 import { AiOutlineBook } from "@react-icons/all-files/ai/AiOutlineBook";
 import { AiOutlineLock } from "@react-icons/all-files/ai/AiOutlineLock";
+import { AiOutlineProject } from "@react-icons/all-files/ai/AiOutlineProject";
 
 export function Navbar() {
   const [loading, setLoading] = useState(true);
@@ -97,6 +98,13 @@ export function Navbar() {
               </Stack>
             </MenuButton>
             <MenuList>
+              {!loading && session.user.isAdmin && (
+                <Link href="/admin">
+                  <MenuItem icon={<AiOutlineProject />}>
+                    Admin Dashboard
+                  </MenuItem>
+                </Link>
+              )}
               <Link href="/user">
                 <MenuItem icon={<AiOutlineBook />}>Bookings List</MenuItem>
               </Link>
