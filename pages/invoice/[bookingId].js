@@ -152,7 +152,7 @@ export async function getServerSideProps(context) {
     };
   }
 
-  if (doc.data().userId !== session.user.id) {
+  if (!session.user.isAdmin && doc.data().userId !== session.user.id) {
     return {
       redirect: {
         destination: "/",
