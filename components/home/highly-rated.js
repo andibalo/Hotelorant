@@ -11,13 +11,13 @@ import { SectionWrapper } from "../atoms/section-wrapper";
 import { HotelCard } from "../molecules/hotel-card";
 import Image from "next/image";
 
-export const HighlyRated = () => {
+export const HighlyRated = ({ hotels }) => {
   return (
     <SectionWrapper>
       <Heading fontSize="2xl" color="brand.200" mb="5">
         Highly Rated
       </Heading>
-      <Stack direction="row" spacing="5" h="md">
+      <Stack direction="row" spacing="5" minH="md">
         <Flex flex="0.6">
           <Box
             h="full"
@@ -56,10 +56,9 @@ export const HighlyRated = () => {
         </Flex>
         <Box flex="1">
           <SimpleGrid columns={2} spacing={5} h="full">
-            <HotelCard isCompact />
-            <HotelCard isCompact />
-            <HotelCard isCompact />
-            <HotelCard isCompact />
+            {hotels &&
+              hotels.length > 0 &&
+              hotels.map((hotel) => <HotelCard isCompact hotel={hotel} />)}
           </SimpleGrid>
         </Box>
       </Stack>

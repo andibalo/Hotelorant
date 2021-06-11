@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Center, Heading } from "@chakra-ui/react";
+import { Center, Heading, Box } from "@chakra-ui/react";
 import { HeaderTab } from "../../components/admin/header-tab";
 import { Container } from "../../components/atoms/container";
 import { Navbar } from "../../components/navbar";
@@ -41,6 +41,7 @@ export default function AdminHome(props) {
           Hello, Admin
         </Heading>
         <HeaderTab route="home" />
+        <Box mb="16"></Box>
         {hotels && hotels.length > 0 ? (
           hotels.map((hotel) => {
             return (
@@ -66,7 +67,7 @@ export default function AdminHome(props) {
 export async function getServerSideProps() {
   const hotels = [];
   const hotelsRef = db.collection("hotels");
-  const snapshot = await hotelsRef.get();
+  const snapshot = await hotelsRef.orderBy("timestamp", "desc").get();
 
   snapshot.forEach((doc) => {
     hotels.push({

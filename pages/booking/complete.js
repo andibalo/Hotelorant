@@ -15,7 +15,7 @@ import { SimpleGrid } from "@chakra-ui/react";
 import { Container } from "../../components/atoms/container";
 import { Button } from "../../components/atoms/button";
 
-const Login = () => {
+const Complete = () => {
   return (
     <Flex minH="100vh" flexDirection="column">
       <Navbar />
@@ -99,4 +99,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Complete;

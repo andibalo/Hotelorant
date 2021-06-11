@@ -85,6 +85,12 @@ export default async function handler(req, res) {
       timestamp: doc.data().timestamp._seconds,
     };
 
+    const hotelRef = db.collection("hotels").doc(hotelId);
+
+    await hotelRef.update({
+      bookedCount: admin.firestore.FieldValue.increment(1),
+    });
+
     if (!response) {
       throw new Error("Could not insert into database");
     }

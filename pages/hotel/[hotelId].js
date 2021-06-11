@@ -42,12 +42,15 @@ const responsive = {
 };
 
 export default function HotelDetail(props) {
+  console.log(props);
+
   const {
     id,
     name,
     description,
     price,
     location,
+    address,
     images,
     rooms,
     hasAc,
@@ -69,8 +72,8 @@ export default function HotelDetail(props) {
               </Link>
             </Box>{" "}
             &gt;{" "}
-            <Box as="span" color="brand.100">
-              Ritz Carlton
+            <Box as="span" color="brand.100" textTransform="capitalize">
+              {name}
             </Box>
           </Text>
         </Box>
@@ -119,11 +122,11 @@ export default function HotelDetail(props) {
           </Box>
         </Box>
 
-        <Stack direction="row" spacing="5" mb="20">
+        <SimpleGrid columns={2} spacing="5" mb="20">
           <Box flex="1">
             <Box mb="5">
               <Heading color="brand.100" mb="3">
-                {formatRupiah(price)}
+                {`${formatRupiah(price)} / Night`}
               </Heading>
               <Heading
                 color="brand.200"
@@ -132,6 +135,7 @@ export default function HotelDetail(props) {
               >
                 {name}
               </Heading>
+              <Text color="gray.500">{address}</Text>
               <Text color="yellow.500">
                 {rating && rating.length > 0
                   ? "Hotel bintang 5"
@@ -198,16 +202,19 @@ export default function HotelDetail(props) {
               </Flex>
             </Box>
           </Box>
-        </Stack>
+        </SimpleGrid>
         <Box>
           <Heading color="brand.200" fontSize="xl" mb="3">
             Around The Hotel
           </Heading>
           <SimpleGrid columns="4" spacing="5" h="xs">
-            <HotelCard />
-            <HotelCard />
-            <HotelCard />
-            <HotelCard />
+            {props.nearbyHotels && props.nearbyHotels.length > 0 ? (
+              props.nearbyHotels.map((hotel) => <HotelCard hotel={hotel} />)
+            ) : (
+              <Heading color="gray.500" fontSize="md">
+                No Hotels Found
+              </Heading>
+            )}
           </SimpleGrid>
         </Box>
       </Container>
@@ -217,8 +224,10 @@ export default function HotelDetail(props) {
 }
 
 export async function getServerSideProps(context) {
+  const nearbyHotels = [];
   const hotelRef = db.collection("hotels").doc(context.query.hotelId);
   const doc = await hotelRef.get();
+  let hotelId = doc.id;
 
   if (!doc.exists) {
     return {
@@ -232,9 +241,26 @@ export async function getServerSideProps(context) {
     timestamp: doc.data().timestamp._seconds,
   };
 
+  const hotelsRef = db.collection("hotels");
+
+  const snapshot = await hotelsRef
+    .where("location", "==", doc.data().location)
+    .get();
+
+  snapshot.forEach((doc) => {
+    if (doc.id !== hotelId) {
+      nearbyHotels.push({
+        ...doc.data(),
+        id: doc.id,
+        timestamp: doc.data().timestamp._seconds,
+      });
+    }
+  });
+
   return {
     props: {
       hotel,
+      nearbyHotels,
     },
   };
 }
