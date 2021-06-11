@@ -18,7 +18,7 @@ import { Button } from "../../components/atoms/button";
 import Image from "next/image";
 import { CheckIcon } from "@chakra-ui/icons";
 
-export default function Invoice() {
+export default function Checkout() {
   return (
     <Flex minH="100vh" flexDirection="column">
       <Navbar />
