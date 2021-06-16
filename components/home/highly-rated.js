@@ -58,7 +58,7 @@ export const HighlyRated = ({ hotels }) => {
           <SimpleGrid columns={2} spacing={5} h="full">
             {hotels &&
               hotels.length > 0 &&
-              hotels.map((hotel) => <HotelCard isCompact hotel={hotel} />)}
+              hotels.map((hotel) => <HotelCard isCompact key={hotel.id} hotel={hotel} />)}
           </SimpleGrid>
         </Box>
       </Stack>

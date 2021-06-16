@@ -7,15 +7,12 @@ import {
   Button as ChakraButton,
   Center,
 } from "@chakra-ui/react";
-import { StarIcon } from "@chakra-ui/icons";
 import { Container } from "../../components/atoms/container";
-import { Button } from "../../components/atoms/button";
 import { getSession } from "next-auth/client";
 import db from "../../utils/db/index";
 import { BookedRow } from "../../components/molecules/booked-row";
 
 export default function BookingList(props) {
-  console.log(props);
   const [bookings, setBookings] = useState(props.bookings);
 
   return (

@@ -1,7 +1,17 @@
-import { Box, Input, Heading, Stack } from "@chakra-ui/react";
+import { Box, Input, Heading, Stack, Select } from "@chakra-ui/react";
 import { Button } from "../atoms/button";
 
-export const SearchBox = () => {
+export const SearchBox = ({
+  filters,
+  isLoading,
+  handleChangeFilters,
+  resetFilter,
+  handleSearchSubmit,
+  searchKey,
+  setSearchKey,
+}) => {
+  const { location, rating, price } = filters;
+
   return (
     <Box
       borderWidth="1px"
@@ -14,15 +24,72 @@ export const SearchBox = () => {
       <Heading textAlign="center" mb="3" color="brand.200">
         Search Hotel
       </Heading>
-      <Stack direction="row" spacing="5">
+      <Stack direction="row" spacing="5" mb="10">
         <Input
           type="text"
           placeholder="Search hotel name"
           focusBorderColor="brand.100"
           size="lg"
+          value={searchKey}
+          onChange={(e) => setSearchKey(e.target.value)}
         />
         <Box>
-          <Button size="lg">Search</Button>
+          <Button size="lg" onClick={handleSearchSubmit}>
+            Search
+          </Button>
+        </Box>
+      </Stack>
+      <Heading fontSize="lg" color="brand.200" mb="3">
+        Filters
+      </Heading>
+      <Stack direction="row" spacing="3" align="center">
+        <Select
+          placeholder="Location"
+          focusBorderColor="brand.100"
+          borderColor="brand.100"
+          name="location"
+          onChange={(e) => handleChangeFilters(e)}
+          value={location}
+        >
+          <option value="jakarta">Jakarta</option>
+          <option value="tangerang">Tangerang</option>
+          <option value="depok">Depok</option>
+          <option value="bekasi">Bekasi</option>
+          <option value="lamborghini">Lamborghini</option>
+        </Select>
+        <Select
+          name="rating"
+          placeholder="Rating"
+          focusBorderColor="brand.100"
+          borderColor="brand.100"
+          onChange={(e) => handleChangeFilters(e)}
+          value={rating}
+        >
+          <option value="5">5 Stars</option>
+          <option value="4">4 Stars</option>
+          <option value="3">3 Stars</option>
+          <option value="2">2 Stars</option>
+          <option value="1">1 Stars</option>
+        </Select>
+        <Select
+          name="price"
+          focusBorderColor="brand.100"
+          borderColor="brand.100"
+          value={price}
+          onChange={(e) => handleChangeFilters(e)}
+        >
+          <option value="desc">Highest Price</option>
+          <option value="asc">Lowest Price</option>
+        </Select>
+        <Box flex="0.4">
+          <Button
+            variant="ghost"
+            colorScheme="red"
+            px="5"
+            onClick={resetFilter}
+          >
+            Reset
+          </Button>
         </Box>
       </Stack>
     </Box>

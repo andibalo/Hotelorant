@@ -1,12 +1,12 @@
 import { Box } from "@chakra-ui/react";
 import { Navbar } from "../components/navbar";
 import { Container } from "../components/atoms/container";
-import { SearchBox } from "../components/molecules/search-box";
 import { HighlyRated } from "../components/home/highly-rated";
 import { MostPicked } from "../components/home/most-picked";
 import { MostAffordable } from "../components/home/most-affordable";
 import { Footer } from "../components/footer";
 import db from "../utils/db/index";
+import { Hero } from "../components/home/hero";
 
 export default function Home(props) {
   const { affordableHotels, mostBookedHotels, highlyRatedHotels } = props;
@@ -15,7 +15,7 @@ export default function Home(props) {
     <div>
       <Navbar />
       <Container>
-        <SearchBox />
+        <Hero />
         <Box mb="10"></Box>
         <HighlyRated hotels={affordableHotels} />
         <MostPicked hotels={mostBookedHotels} />

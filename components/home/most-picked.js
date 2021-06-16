@@ -11,7 +11,7 @@ export const MostPicked = ({ hotels }) => {
       <SimpleGrid columns="4" spacing="5">
         {hotels &&
           hotels.length > 0 &&
-          hotels.map((hotel) => <HotelCard hotel={hotel} />)}
+          hotels.map((hotel) => <HotelCard key={hotel.id} hotel={hotel} />)}
       </SimpleGrid>
     </SectionWrapper>
   );
