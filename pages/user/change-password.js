@@ -39,16 +39,20 @@ export default function ChangePassword(props) {
     });
   };
 
-  const handleEditProfile = async () => {
+  const handleUpdatePassword = async () => {
     try {
-      const res = await axios.put(`/api/user/${props.session.user.id}`, {
-        ...formData,
-      });
+      const res = await axios.put(
+        `/api/user/password/${props.session.user.id}`,
+        {
+          currentPassword,
+          newPassword,
+        }
+      );
 
       setFormData({
-        name: "",
-        phoneNumber: "",
-        dob: "",
+        currentPassword: "",
+        newPassword: "",
+        confirmNewPassword: "",
       });
 
       toast({
@@ -114,7 +118,7 @@ export default function ChangePassword(props) {
                 onChange={handleChange}
               />
             </FormControl>
-            <Button onClick={handleEditProfile}>Update Password</Button>
+            <Button onClick={handleUpdatePassword}>Update Password</Button>
           </Box>
         </Stack>
       </Container>

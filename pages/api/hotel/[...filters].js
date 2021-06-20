@@ -18,17 +18,17 @@ export default async function handler(req, res) {
     } else if (location !== "null" && rating !== "null") {
       snapshot = await hotelsRef
         .where("location", "==", location)
-        .where("rating", "==", rating)
+        .orderBy("averageRating", rating)
         .orderBy("price", price)
         .get();
     } else if (location === "null") {
       snapshot = await hotelsRef
-        .where("brand", "==", location)
+        .orderBy("averageRating", rating)
         .orderBy("price", price)
         .get();
     } else if (rating === "null") {
       snapshot = await hotelsRef
-        .where("year", "==", rating)
+        .where("location", "==", location)
         .orderBy("price", price)
         .get();
     }

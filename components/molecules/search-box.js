@@ -55,7 +55,7 @@ export const SearchBox = ({
           <option value="tangerang">Tangerang</option>
           <option value="depok">Depok</option>
           <option value="bekasi">Bekasi</option>
-          <option value="lamborghini">Lamborghini</option>
+          <option value="bogor">Bogor</option>
         </Select>
         <Select
           name="rating"
@@ -65,11 +65,8 @@ export const SearchBox = ({
           onChange={(e) => handleChangeFilters(e)}
           value={rating}
         >
-          <option value="5">5 Stars</option>
-          <option value="4">4 Stars</option>
-          <option value="3">3 Stars</option>
-          <option value="2">2 Stars</option>
-          <option value="1">1 Stars</option>
+          <option value="desc">Highest Rated</option>
+          <option value="asc">Lowest Rated</option>
         </Select>
         <Select
           name="price"

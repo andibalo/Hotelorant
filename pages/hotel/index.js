@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
-import { Box } from "@chakra-ui/react";
+import { Box, Center, Flex, Heading, Spinner } from "@chakra-ui/react";
 import { Navbar } from "../../components/navbar";
 import { Container } from "../../components/atoms/container";
 import { SearchBox } from "../../components/molecules/search-box";
 import { Footer } from "../../components/footer";
 import db from "../../utils/db/index";
 import { SearchResultRow } from "../../components/molecules/search-result-row";
+import axios from "axios";
 
 export default function Hotels(props) {
   const [hotels, setHotels] = useState(props.hotels);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [searchKey, setSearchKey] = useState("");
   const [filters, setFilters] = useState({
     location: "",
@@ -25,8 +26,8 @@ export default function Hotels(props) {
     let url = "/api/hotel";
 
     url = url.concat(searchKey !== "" ? `/${searchKey}` : "/null");
-    url = url.concat(location !== "" ? `/${brand}` : "/null");
-    url = url.concat(rating !== "" ? `/${year}` : "/null");
+    url = url.concat(location !== "" ? `/${location}` : "/null");
+    url = url.concat(rating !== "" ? `/${rating}` : "/null");
     url = url.concat(price !== "" ? `/${price}` : "/null");
 
     console.log(url);
@@ -96,13 +97,21 @@ export default function Hotels(props) {
           handleSearchSubmit={handleSearchSubmit}
         />
         <Box mb="20"></Box>
-        {hotels && hotels.length > 0 ? (
+        {isLoading && (
+          <Flex justifyContent="center" minH="md">
+            <Spinner size="xl" color="brand.100" />
+          </Flex>
+        )}
+        {!isLoading &&
+          hotels &&
+          hotels.length > 0 &&
           hotels.map((hotel) => (
             <SearchResultRow key={hotel.id} hotel={hotel} />
-          ))
-        ) : (
-          <Center>
-            <Heading fontSize="xl">Loading...</Heading>
+          ))}
+
+        {!isLoading && hotels && hotels.length <= 0 && (
+          <Center minH="2xs">
+            <Heading fontSize="xl">No Hotels Found</Heading>
           </Center>
         )}
       </Container>

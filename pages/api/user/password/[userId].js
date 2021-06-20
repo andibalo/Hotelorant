@@ -39,7 +39,7 @@ const handler = async (req, res) => {
     const userRef = db.collection("users").doc(req.query.userId);
 
     const user = userRef.get();
-
+    console.log(user);
     const isPasswordMatch = await bcrypt.compare(
       currentPassword,
       user.password

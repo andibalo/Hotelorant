@@ -10,6 +10,7 @@ import {
   Image as ChakraImage,
   Flex,
 } from "@chakra-ui/react";
+import { StarIcon } from "@chakra-ui/icons";
 import { Container } from "../../components/atoms/container";
 import { Button } from "../../components/atoms/button";
 import { HotelCard } from "../../components/molecules/hotel-card";
@@ -58,6 +59,7 @@ export default function HotelDetail(props) {
     hasWifi,
     hasFridge,
     rating,
+    averageRating,
   } = props.hotel;
 
   return (
@@ -82,7 +84,7 @@ export default function HotelDetail(props) {
             <Heading color="brand.200" textTransform="capitalize">
               {name}
             </Heading>
-            <Text color="gray.500" textTransform="capitalize">
+            <Text color="gray.500" textTransform="capitalize" fontSize="xl">
               {location}
             </Text>
           </Box>
@@ -136,11 +138,10 @@ export default function HotelDetail(props) {
                 {name}
               </Heading>
               <Text color="gray.500">{address}</Text>
-              <Text color="yellow.500">
-                {rating && rating.length > 0
-                  ? "Hotel bintang 5"
-                  : "No rating yet"}
-              </Text>
+              <Stack direction="row" alignItems="center">
+                <StarIcon color="yellow.300" w="6" h="6" mr="1"></StarIcon>
+                <Text color="yellow.700">{averageRating}</Text>
+              </Stack>
             </Box>
             <Box>
               <Text mb="3">{description}</Text>
